@@ -2,7 +2,10 @@ package com.example.playscalajs
 
 import com.example.playscalajs.shared.SharedMessages
 import org.scalajs.dom
-import org.scalajs.d3v4._
+// import org.scalajs.d3v4._
+import japgolly.scalajs.react.{CtorType, ReactDOM}
+import com.example.playscalajs.components.Tree
+import japgolly.scalajs.react.component.Scala.Component
 
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 // import org.singlespaced.d3js.d3
@@ -10,13 +13,19 @@ import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel}
 
 import scala.scalajs.js
 
-@JSExportTopLevel("ScalaJSExample")
+// @JSExportTopLevel("ScalaJSExample")
 object ScalaJSExample {
 
-  @JSExport
+  // @JSExport
   def main(args: Array[String]): Unit = {
     dom.document.getElementById("scalajsShoutOut").textContent =
       SharedMessages.itWorks
+
+    //ReactDOM.render(Tree, dom.document.getElementById("root"))
+    val x = Tree.TreeChoice()
+    x.renderIntoDOM(dom.document.getElementById("react"))
+    // Tree.NoArgs().renderIntoDOM(dom.document.getElementById("react"))
+
     val graphHeight = 450
 
     //The width of each bar.
@@ -35,6 +44,7 @@ object ScalaJSExample {
     val barHeightMultiplier = graphHeight / maxData;
 
     //Color for start
+    /*
     val c = d3.hcl("DarkSlateBlue")
 
     val rectXFun = (i: Int) => i * horizontalBarDistance
@@ -52,5 +62,6 @@ object ScalaJSExample {
       .attr("height", rectHeightFun)
       .style("fill", rectColorFun)
 
+   */
   }
 }

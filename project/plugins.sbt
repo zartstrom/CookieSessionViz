@@ -5,6 +5,7 @@ logLevel := Level.Warn
 resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"
 
 // Sbt plugins
+// addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % "0.9.0")
 addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % "0.9.0")
 
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.6")
