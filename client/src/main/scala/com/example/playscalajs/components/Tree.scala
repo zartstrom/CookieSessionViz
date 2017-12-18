@@ -96,7 +96,7 @@ object Tree {
       }
       def blub4(trace: Trace) = { e: onClick.Event =>
         println("clicked circle")
-         $.setState((3, trace.referer, trace.url))
+         $.setState((trace.timestamp, trace.referer, trace.url))
       }
       // def blub2(trace: Trace) = Callback( $.setState((3, trace.referer, trace.url)) )
       def blub3(trace: Trace) = $.setState((3, trace.referer, trace.url))
