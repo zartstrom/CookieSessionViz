@@ -1,3 +1,5 @@
+val circeVersion = "0.9.0-M2"
+
 lazy val server = (project in file("server"))
   .settings(commonSettings)
   .settings(
@@ -8,6 +10,11 @@ lazy val server = (project in file("server"))
     compile in Compile := ((compile in Compile) dependsOn scalaJSPipeline).value,
     libraryDependencies ++= Seq(
       "com.vmunier" %% "scalajs-scripts" % "1.1.1",
+      "io.circe" %% "circe-core" % circeVersion,
+      "io.circe" %% "circe-parser" % circeVersion,
+      "io.circe" %% "circe-generic" % circeVersion,
+      "com.lihaoyi" %% "upickle" % "0.4.4",
+      "com.lihaoyi" %% "autowire" % "0.2.6",
       guice,
       specs2 % Test
     ),
@@ -25,6 +32,11 @@ lazy val client = (project in file("client"))
     resolvers += "jitpack" at "https://jitpack.io",
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % "0.9.3",
+      "com.lihaoyi" %%% "autowire" % "0.2.6",
+      "com.lihaoyi" %%% "upickle" % "0.4.4",
+      "io.circe" %%% "circe-core" % circeVersion,
+      "io.circe" %%% "circe-parser" % circeVersion,
+      "io.circe" %%% "circe-generic" % circeVersion,
       "com.github.japgolly.scalajs-react" %%% "core" % "1.1.1"
       // "eu.unicredit" %%% "paths-scala-js" % "0.4.5"
     ),
