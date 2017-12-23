@@ -41,7 +41,7 @@ object TreeChart {
     def render(traces: List[Trace], stateTrace: (Int, String, String)) = {
       val myRect: TagOf[G] =
         <.g(^.transform := "translate(0,10)",
-          <.rect(^.fill := "#eeeeee", ^.width := 60, ^.height := 30),
+          <.rect(^.fill := "#eeeeee", ^.width := 130, ^.height := 30),
           <.text(^.transform := "translate(5, 20)", stateTrace.toString))
       val myLink = <.g(^.transform := "translate(0,10)",
         a(<.text("brabbel"),
@@ -57,21 +57,17 @@ object TreeChart {
           <.g(
             ^.transform := movie(trace.timestamp, maxTime, minTime),
             <.circle(onClick ==> onClickTrace(trace),
-              ^.r := 30,
+              ^.r := 12,
               ^.cx := 0,
-              ^.cy := 0),
-            <.text(
-              ^.transform := "translate(10,0)",
-              ^.textAnchor := "end",
-              trace.url
-            )
+              ^.cy := 0)
+            // <.text( ^.transform := "translate(10,0)", ^.textAnchor := "end", trace.url )
           )
         })
         .toVdomArray
 
       <.svg(^.width := 460,
         ^.height := 400,
-        <.g(^.transform := "translate(0,0)", nodes, myRect, myLink))
+        <.g(^.transform := "translate(0,0)", nodes, myRect))
 
     }
   }

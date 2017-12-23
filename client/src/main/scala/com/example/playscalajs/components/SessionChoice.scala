@@ -33,7 +33,7 @@ object SessionChoice {
         val sel = select(options, onChange ==> onC _)
 
         def treeChart(x: Int) = treeChartComp(sessions(x))
-        div(sel, treeChart(choiceState))
+        div(div(sel), div(treeChart(choiceState)))
       } else {
         div("no data yet")
       }

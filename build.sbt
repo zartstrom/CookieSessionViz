@@ -13,8 +13,7 @@ lazy val server = (project in file("server"))
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
       "io.circe" %% "circe-generic" % circeVersion,
-      "com.lihaoyi" %% "upickle" % "0.4.4",
-      "com.lihaoyi" %% "autowire" % "0.2.6",
+      "net.debasishg" %% "redisclient" % "3.4",
       guice,
       specs2 % Test
     ),

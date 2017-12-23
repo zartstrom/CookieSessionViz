@@ -47,11 +47,12 @@ object SessionLoader {
         case r => {
           decode[Vector[Session]](r) match {
             case Left(_) => {
-              println("Could not parse ", r)
+              println(s"Could not parse <${r}>")
               $.modState(s => s)
             }
             case Right(sessionVec) => {
               println("got new bread")
+              println(r)
               $.setState(sessionVec).runNow()
             }
           }
@@ -63,7 +64,7 @@ object SessionLoader {
       // Await.ready(fetch, 5 seconds)
 
       def x = SessionChoice.sessionChoiceComp(sessions)
-      div("not implemented yet", x)
+      div(x)
     }
   }
 
