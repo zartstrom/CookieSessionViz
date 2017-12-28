@@ -31,6 +31,13 @@ object SessionLoader {
         .get(url = "/sessions", headers = jsonHeaders)
         .map(_.responseText)
 
+    def onSelectRefresh(e: ReactEventFromInput) = {
+      val checked = e.target.checked
+      $.modState({ s =>
+        SessionLoaderState(checked, s.data)
+      })
+    }
+
     def fetch3: Unit = {
       Ajax
         .get(url = "/sessions", headers = jsonHeaders)
@@ -47,7 +54,9 @@ object SessionLoader {
                 println(r)
 
                 // $.setState(Some(sessionGraph)).runNow()
-                $.modState({s => SessionLoaderState(s.refresh, Some(sessionGraph))}).runNow()
+                $.modState({ s =>
+                  SessionLoaderState(s.refresh, Some(sessionGraph))
+                }).runNow()
               }
             }
           }
@@ -55,21 +64,25 @@ object SessionLoader {
     }
 
     def refresh(refreshNow: Boolean): Unit = {
-      val refreshToggle = true
+      val refreshToggle = $.state.runNow().refresh
+
       if (refreshToggle || refreshNow) {
         fetch3
       }
-      // val p: CallbackTo[$.Props] = $.props
-      //$.pro
 
-      setTimeout(1000 seconds) { // note the absence of () =>
+      setTimeout(10 seconds) { // note the absence of () =>
         refresh(false)
       }
     }
 
-    def render(name: String,
-               state: SessionLoaderState): VdomElement = {
-      val refreshDiv = <.div(<.form(<.input("refresh")))
+    def render(name: String, state: SessionLoaderState): VdomElement = {
+      println("render session loader")
+      val refreshDiv = <.div(
+        <.form(^.onChange ==> onSelectRefresh _,
+               <.input(^.value := "refresh",
+                       ^.name := "refresh",
+                       ^.`type` := "checkbox"),
+               <.label(^.`for` := "refresh", "refresh")))
       val dataDiv = state.data match {
         case None     => { <.div("no data available") }
         case Some(sg) => <.div(treeChartComp(sg))
@@ -82,8 +95,9 @@ object SessionLoader {
 
   val sessionLoaderComp = ScalaComponent
     .builder[String]("Load sessions")
-    .initialState(SessionLoaderState(true, emptySessionGraph))
+    .initialState(SessionLoaderState(false, emptySessionGraph))
     .renderBackend[SessionLoaderBackend]
-    .componentDidMount(life => Callback { life.backend.refresh(refreshNow = true) })
+    .componentDidMount(life =>
+      Callback { life.backend.refresh(refreshNow = true) })
     .build
 }

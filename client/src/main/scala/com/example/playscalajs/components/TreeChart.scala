@@ -51,6 +51,7 @@ object TreeChart {
     }
 
     def render(sessionGraph: SessionGraph, stateTrace: (Int, String, String)) = {
+      println("render tree chart")
       val myRect: TagOf[G] =
         <.g(
           key := "infoSheet",
@@ -72,32 +73,6 @@ object TreeChart {
         Point(x, y)
       }
 
-      /*
-      def pointsAndTraces(treeR: TreeR): List[(Point, Trace)] = {
-        val fromChildren = treeR.children.flatMap(pointsAndTraces)
-        val x = movieX(treeR.trace.timestamp, maxTime, minTime)
-        val y = movieY(treeR.positionY)
-        (Point(x, y), treeR.trace) :: fromChildren
-      }
-
-      val pAndT = pointsAndTraces(treeR)
-      // println(pAndT.length)
-      // println(pAndT)
-
-      def linesFromTree(tree: TreeR): List[Line] = {
-        val childrenLines = tree.children.flatMap(linesFromTree)
-        val myLines = tree.children.map({ c =>
-          Line(pointFromTree(tree, maxTime, minTime),
-               pointFromTree(c, maxTime, minTime))
-        })
-        (myLines ++ childrenLines).toList
-      }
-      val lines: List[Line] = linesFromTree(treeR)
-      */
-
-      // val points = traces.map(t => movie(t.timestamp, maxTime, minTime))
-      // val pairs: Seq[List[Point]] = points.sliding(2).toList
-      // val edges = pairs
       val edges = sessionGraph.edges
         .map({ edge =>
           val start = scale(edge.start)
