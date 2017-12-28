@@ -2,10 +2,10 @@ package com.example.playscalajs.components
 
 import com.example.playscalajs.shared.CookieSession.Session
 import TreeChart.treeChartComp
-
+import com.example.playscalajs.shared.Trees
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.VdomElement
-import japgolly.scalajs.react.vdom.all.{div, onChange, option, select, value}
+import japgolly.scalajs.react.vdom.all.{div, key, onChange, option, select, value}
 import japgolly.scalajs.react.vdom.svg_<^._
 
 object SessionChoice {
@@ -26,13 +26,13 @@ object SessionChoice {
       if (sessions.length > 0) {
         val options = sessions.toList.zipWithIndex
           .map({
-            case (_, index) => option(value := index.toString, s"Session${index}")
+            case (_, index) => option(key := index, value := index.toString, s"Session${index}")
           })
           .toVdomArray
         // .map({(trace, idx) => option(value := idx.toString)})
         val sel = select(options, onChange ==> onC _)
 
-        def treeChart(x: Int) = treeChartComp(sessions(x))
+        def treeChart(x: Int) = treeChartComp(Trees.buildSessionGraph(sessions(x)))
         div(div(sel), div(treeChart(choiceState)))
       } else {
         div("no data yet")

@@ -3,7 +3,7 @@ package com.example.playscalajs.controllers
 import javax.inject._
 import play.api.mvc._
 
-import com.example.playscalajs.data.Sessions._
+import com.example.playscalajs.data.Storage._
 import com.example.playscalajs.shared.SharedMessages
 
 @Singleton
