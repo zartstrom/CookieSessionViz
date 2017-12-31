@@ -1,0 +1,22 @@
+.content {
+    background-color: white;
+    max-width: 1080px;
+    padding: 20px;
+    background-color: #D5D8DC;
+}
+
+.center {
+    margin: auto;
+}
+
+svg {
+    background-color: #EAECEE;
+}
+
+body {
+    background-color: #ABB2B9;
+}
+
+* {
+    font-family: medium-content-serif-font,Georgia,Cambria,"Times New Roman",Times,serif;
+}

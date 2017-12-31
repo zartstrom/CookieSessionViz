@@ -32,7 +32,7 @@ object SessionLoader {
         .map(_.responseText)
 
     def onSelectRefresh(e: ReactEventFromInput) = {
-      val checked = e.target.checked
+      val checked = e.target.checked // need to persist value before using it in callback
       $.modState({ s =>
         SessionLoaderState(checked, s.data)
       })
@@ -87,7 +87,7 @@ object SessionLoader {
         case None     => { <.div("no data available") }
         case Some(sg) => <.div(treeChartComp(sg))
       }
-      <.div(refreshDiv, dataDiv)
+      <.div(dataDiv, refreshDiv)
     }
   }
 

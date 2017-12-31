@@ -18,22 +18,14 @@ object TreeChart {
   val emptyTrace = (0, "", "")
 
   class BackendTreeChart($ : BackendScope[SessionGraph, (Int, String, String)]) {
-    def movie(t: Int, tmax: Int, tmin: Int): Point = {
+    def movieX(time: Float, timeMax: Int, timeMin: Int): Int = {
       val padding = 40
       val width = 470
-      val ynew = 200
-      val xnew = padding + ((width - 2 * padding) * (t - tmin).toFloat / (tmax - tmin).toFloat).toInt
-      Point(xnew, ynew)
-    }
-
-    def movieX(t: Float, tmax: Int, tmin: Int): Int = {
-      val padding = 40
-      val width = 470
-      val xnew = padding + ((width - 2 * padding) * (t - tmin) / (tmax - tmin).toFloat).toInt
+      val xnew = padding + ((width - 2 * padding) * (time - timeMin) / (timeMax - timeMin).toFloat).toInt
       xnew
     }
 
-    def movieY(position: Float): Int = (200 + 60 * position).toInt
+    def movieY(coordinateY: Float): Int = (200 + 60 * coordinateY).toInt
 
     def pointFromTree(treeR: TreeR, maxTime: Int, minTime: Int): Point = {
       val x = movieX(treeR.trace.timestamp, maxTime, minTime)
@@ -52,6 +44,7 @@ object TreeChart {
 
     def render(sessionGraph: SessionGraph, stateTrace: (Int, String, String)) = {
       println("render tree chart")
+      /*
       val myRect: TagOf[G] =
         <.g(
           key := "infoSheet",
@@ -63,6 +56,7 @@ object TreeChart {
                        a(<.text("brabbel"),
                          href := "http://www.github.com",
                          target := "_blank"))
+                         */
 
       val maxTime = sessionGraph.maxTime
       val minTime = sessionGraph.minTime
@@ -103,13 +97,12 @@ object TreeChart {
         })
         .toVdomArray
 
-      <.svg(^.width := 460,
+      <.svg(^.width := 660,
             ^.height := 400,
             <.g(key := "chart",
                 ^.transform := "translate(0,0)",
-                nodes,
                 edges,
-                myRect))
+                nodes))
 
     }
   }
