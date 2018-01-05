@@ -2,7 +2,7 @@ package com.example.playscalajs.components
 
 import com.example.playscalajs.shared.CookieSession.Session
 import TreeChart.treeChartComp
-import com.example.playscalajs.shared.Trees
+import com.example.playscalajs.shared.Forest
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.VdomElement
 import japgolly.scalajs.react.vdom.all.{div, key, onChange, option, select, value}
@@ -32,7 +32,7 @@ object SessionChoice {
         // .map({(trace, idx) => option(value := idx.toString)})
         val sel = select(options, onChange ==> onC _)
 
-        def treeChart(x: Int) = treeChartComp(Trees.buildSessionGraph(sessions(x)))
+        def treeChart(x: Int) = treeChartComp(Forest.sessionData(sessions(x), "cookie"))
         div(div(sel), div(treeChart(choiceState)))
       } else {
         div("no data yet")

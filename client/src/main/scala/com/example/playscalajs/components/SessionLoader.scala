@@ -82,7 +82,7 @@ object SessionLoader {
                <.input(^.value := "refresh",
                        ^.name := "refresh",
                        ^.`type` := "checkbox"),
-               <.label(^.`for` := "refresh", "refresh")))
+               <.label(^.`for` := "refresh", "auto refresh")))
       val dataDiv = state.data match {
         case None     => { <.div("no data available") }
         case Some(sg) => <.div(treeChartComp(sg))

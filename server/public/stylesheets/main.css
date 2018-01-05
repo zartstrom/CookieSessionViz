@@ -13,10 +13,34 @@ svg {
     background-color: #EAECEE;
 }
 
+.info {
+    background-color: #EAECEE;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
 body {
     background-color: #ABB2B9;
 }
 
 * {
     font-family: medium-content-serif-font,Georgia,Cambria,"Times New Roman",Times,serif;
+}
+
+td {
+    width: 200px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.toLeft {
+    float: left;
+    width: 50%;
+    text-align: left;
+}
+
+.toRight {
+    float: right;
+    width: 50%;
+    text-align: right;
 }

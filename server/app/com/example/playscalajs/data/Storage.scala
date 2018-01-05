@@ -1,8 +1,7 @@
 package com.example.playscalajs.data
 
 import com.example.playscalajs.shared.CookieSession.Trace
-import com.example.playscalajs.shared.Trees
-import com.example.playscalajs.shared.Trees.buildTree
+import com.example.playscalajs.shared.Forest
 import io.circe._
 import io.circe.generic.auto._
 import io.circe.parser._
@@ -27,8 +26,9 @@ object Storage {
   )
 
   def sessionsSerial = {
+    val cookieVal = "cookie1"
     val r = new RedisClient("127.0.0.1", 6379)
-    val data = r.lrange("cookie1", 0, -1)
+    val data = r.lrange(cookieVal, 0, -1)
     // List(sampleTraces3, sampleTraces4).asJson.noSpaces
     data match {
       case None => ""
@@ -39,7 +39,7 @@ object Storage {
         // val x3 = x2.flatten
         val x4: List[Trace] = list.flatten.map(decode[Trace](_)).collect({ case Right(t) => t }).toList
         // buildTree(sampleTraces4)
-        Trees.buildSessionGraph(x4).asJson.noSpaces
+        Forest.sessionData(x4, cookieVal).asJson.noSpaces
       }
     }
     // Trees.buildSessionGraph(sampleTraces4).asJson.noSpaces
