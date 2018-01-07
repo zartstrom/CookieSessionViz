@@ -9,8 +9,8 @@
     margin: auto;
 }
 
-svg {
-    background-color: #EAECEE;
+#clickPathChart {
+    padding: 0px;
 }
 
 .info {

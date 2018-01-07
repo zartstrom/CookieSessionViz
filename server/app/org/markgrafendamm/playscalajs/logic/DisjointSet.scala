@@ -1,9 +1,7 @@
-package com.example.playscalajs.shared
-
-
-import scala.language.implicitConversions
+package org.markgrafendamm.playscalajs.logic
 
 import scala.collection.mutable
+import scala.language.implicitConversions
 
 // from https://github.com/pathikrit/scalgos
 

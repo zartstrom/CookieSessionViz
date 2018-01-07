@@ -1,23 +1,19 @@
-package com.example.playscalajs.components
-import com.example.playscalajs.shared.CookieSession.{Session, Trace}
-import TreeChart.treeChartComp
-import com.example.playscalajs.shared.SessionGraph
+package org.markgrafendamm.playscalajs.components
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.VdomElement
+import org.markgrafendamm.playscalajs.components.TreeChart.treeChartComp
+import org.markgrafendamm.playscalajs.shared.CookieSession.SessionGraph
 //import japgolly.scalajs.react.vdom.all.{div, onChange, option, select, value}
-import japgolly.scalajs.react.vdom.html_<^._
-import org.scalajs.dom
-
-import scala.scalajs.js.timers._
-import scala.util.{Failure, Success}
-import scala.concurrent.ExecutionContext.Implicits.global
 import io.circe.generic.auto._
 import io.circe.parser._
+import japgolly.scalajs.react.vdom.html_<^._
+import org.scalajs.dom
+import org.scalajs.dom.ext.Ajax
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.concurrent.duration._
-import dom.ext.Ajax
-
-import scala.concurrent.{Await, Future}
+import scala.scalajs.js.timers._
 
 case class SessionLoaderState(refresh: Boolean, data: Option[SessionGraph])
 

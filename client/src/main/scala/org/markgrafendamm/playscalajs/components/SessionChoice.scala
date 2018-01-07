@@ -1,8 +1,8 @@
-package com.example.playscalajs.components
+package org.markgrafendamm.playscalajs.components
 
-import com.example.playscalajs.shared.CookieSession.Session
+import org.markgrafendamm.playscalajs.shared.CookieSession._
 import TreeChart.treeChartComp
-import com.example.playscalajs.shared.Forest
+// import org.markgrafendamm.playscalajs.shared.ClickPathForest
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.VdomElement
 import japgolly.scalajs.react.vdom.all.{div, key, onChange, option, select, value}
@@ -32,8 +32,9 @@ object SessionChoice {
         // .map({(trace, idx) => option(value := idx.toString)})
         val sel = select(options, onChange ==> onC _)
 
-        def treeChart(x: Int) = treeChartComp(Forest.sessionData(sessions(x), "cookie"))
-        div(div(sel), div(treeChart(choiceState)))
+        // def treeChart(x: Int) = treeChartComp(sg) // put something in there instead of nil.
+        // div(div(sel), div(treeChart(choiceState)))
+        div()
       } else {
         div("no data yet")
       }

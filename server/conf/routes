@@ -3,10 +3,10 @@
 # ~~~~
 
 # Home page
-GET        /                             com.example.playscalajs.controllers.Application.index
+GET        /                             org.markgrafendamm.playscalajs.controllers.Application.index
 
 # Prefix must match `play.assets.urlPrefix`
 GET        /assets/*file                 controllers.Assets.at(file)
 GET        /versionedAssets/*file        controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /sessions                     com.example.playscalajs.controllers.Application.sessions
+GET        /sessions                     org.markgrafendamm.playscalajs.controllers.Application.sessions

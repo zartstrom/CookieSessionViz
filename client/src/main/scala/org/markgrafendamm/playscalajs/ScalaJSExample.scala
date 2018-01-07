@@ -1,9 +1,7 @@
-package com.example.playscalajs
+package org.markgrafendamm.playscalajs
 
-import com.example.playscalajs.shared.{CookieSession, SharedMessages}
 import org.scalajs.dom
-
-import com.example.playscalajs.components.SessionLoader
+import org.markgrafendamm.playscalajs.components.SessionLoader
 
 object ScalaJSExample {
 

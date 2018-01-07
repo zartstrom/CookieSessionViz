@@ -1,12 +1,13 @@
-package com.example.playscalajs.data
+package org.markgrafendamm.playscalajs.data
 
-import com.example.playscalajs.shared.CookieSession.Trace
-import com.example.playscalajs.shared.Forest
+import com.redis._
 import io.circe._
 import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
-import com.redis._
+
+import org.markgrafendamm.playscalajs.shared.CookieSession._
+import org.markgrafendamm.playscalajs.logic.ClickPathForest.sessionData
 
 object Storage {
 
@@ -29,7 +30,6 @@ object Storage {
     val cookieVal = "cookie1"
     val r = new RedisClient("127.0.0.1", 6379)
     val data = r.lrange(cookieVal, 0, -1)
-    // List(sampleTraces3, sampleTraces4).asJson.noSpaces
     data match {
       case None => ""
       case Some(list) => {
@@ -39,9 +39,8 @@ object Storage {
         // val x3 = x2.flatten
         val x4: List[Trace] = list.flatten.map(decode[Trace](_)).collect({ case Right(t) => t }).toList
         // buildTree(sampleTraces4)
-        Forest.sessionData(x4, cookieVal).asJson.noSpaces
+        sessionData(x4, cookieVal).asJson.noSpaces
       }
     }
-    // Trees.buildSessionGraph(sampleTraces4).asJson.noSpaces
   }
 }

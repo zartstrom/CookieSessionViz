@@ -31,8 +31,8 @@ lazy val client = (project in file("client"))
     resolvers += "jitpack" at "https://jitpack.io",
     libraryDependencies ++= Seq(
       "org.scala-js" %%% "scalajs-dom" % "0.9.3",
-      "com.lihaoyi" %%% "autowire" % "0.2.6",
-      "com.lihaoyi" %%% "upickle" % "0.4.4",
+      "be.doeraene" %%% "scalajs-jquery" % "0.9.2",
+      "org.querki" %%% "jquery-facade" % "1.2",
       "io.circe" %%% "circe-core" % circeVersion,
       "io.circe" %%% "circe-parser" % circeVersion,
       "io.circe" %%% "circe-generic" % circeVersion,
@@ -53,7 +53,8 @@ lazy val client = (project in file("client"))
         / "react-dom-server.js"
         minified "react-dom-server.min.js"
         dependsOn "react-dom.js"
-        commonJSName "ReactDOMServer"
+        commonJSName "ReactDOMServer",
+      "org.webjars" % "jquery" % "2.2.1" / "jquery.js" minified "jquery.min.js"
     )
     // "org.singlespaced" %%% "scalajs-d3" % "0.3.4"
   )
