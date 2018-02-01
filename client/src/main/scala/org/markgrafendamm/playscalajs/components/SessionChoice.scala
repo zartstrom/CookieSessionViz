@@ -12,14 +12,14 @@ object SessionChoice {
   val NoArgs =
     ScalaComponent.static("No args")(div("Hello!"))
 
-  class ChoiceBackend($ : BackendScope[Seq[Session], Int]) {
+  class ChoiceBackend($ : BackendScope[Seq[List[Trace]], Int]) {
     def onC(e: ReactEventFromInput) = {
       val x = e.target.value.toInt
       println(s"event fun ${x}")
       $.setState(x)
     }
 
-    def render(sessions: Seq[Session], choiceState: Int): VdomElement = {
+    def render(sessions: Seq[List[Trace]], choiceState: Int): VdomElement = {
       //just use length of sessions
       println("render session choice")
       println(sessions.length)
@@ -42,7 +42,7 @@ object SessionChoice {
   }
 
   val sessionChoiceComp = ScalaComponent
-    .builder[Seq[Session]]("Choose a session")
+    .builder[Seq[List[Trace]]]("Choose a session")
     .initialState(0)
     .renderBackend[ChoiceBackend]
     .build

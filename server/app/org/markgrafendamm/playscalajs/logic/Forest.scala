@@ -3,12 +3,13 @@ package org.markgrafendamm.playscalajs.logic
 
 import scala.collection.immutable.Seq
 import scala.collection.mutable
+import cats.Traverse
 
 object Forest {
   case class DiEdge[N](from: N, to: N)
 
   // DRTree = Directed Rooted Tree
-  case class DRTree[N](node: N, children: List[DRTree[N]]) {
+  case class DRTree[N](node: N, children: List[DRTree[N]]) extends Traverse[DRTree] {
     def map[M](f: N => M): DRTree[M] = {
       DRTree(f(node), children.map(_.map(f)))
     }

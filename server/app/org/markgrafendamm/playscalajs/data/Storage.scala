@@ -12,18 +12,18 @@ import org.markgrafendamm.playscalajs.logic.ClickPathForest.sessionData
 object Storage {
 
   val sampleTraces3 = List(
-    Trace(2, "a", "b"),
-    Trace(8, "c", "d")
+    SimpleTrace(2, "a", "b"),
+    SimpleTrace(8, "c", "d")
   )
 
   val sampleTraces4 = List(
-    Trace(1, "start", "a"),
-    Trace(3, "a", "b"),
-    Trace(5, "a", "f"),
-    Trace(6, "b", "c"),
-    Trace(9, "c", "d"),
-    Trace(12, "c", "g"),
-    Trace(15, "d", "e")
+    SimpleTrace(1, "start", "a"),
+    SimpleTrace(3, "a", "b"),
+    SimpleTrace(5, "a", "f"),
+    SimpleTrace(6, "b", "c"),
+    SimpleTrace(9, "c", "d"),
+    SimpleTrace(12, "c", "g"),
+    SimpleTrace(15, "d", "e")
   )
 
   def sessionsSerial = {
@@ -34,12 +34,16 @@ object Storage {
       case None => ""
       case Some(list) => {
         // dirty
-        val x = list.flatten.mkString(",")
-        val x2: Seq[Either[Error, Trace]] = list.flatten.map(decode[Trace](_))
+        println(list)
+        // val x = list.flatten.mkString(",")
+        // val x2: Seq[Either[Error, Trace]] = list.flatten.map(decode[Trace](_))
         // val x3 = x2.flatten
-        val x4: List[Trace] = list.flatten.map(decode[Trace](_)).collect({ case Right(t) => t }).toList
+        val x4: List[SimpleTrace] = list.flatten.map(decode[SimpleTrace](_)).collect({ case Right(t) => t }).toList
+        println(x4)
         // buildTree(sampleTraces4)
-        sessionData(x4, cookieVal).asJson.noSpaces
+        val sd = sessionData(x4, cookieVal).asJson.noSpaces
+        println(sd)
+        sd
       }
     }
   }

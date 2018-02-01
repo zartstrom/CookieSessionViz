@@ -1,5 +1,7 @@
 val circeVersion = "0.9.0-M2"
 
+scalacOptions += "-Ypartial-unification"
+
 lazy val server = (project in file("server"))
   .settings(commonSettings)
   .settings(
@@ -13,6 +15,7 @@ lazy val server = (project in file("server"))
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
       "io.circe" %% "circe-generic" % circeVersion,
+      "org.typelevel" %% "cats-core" % "1.0.1",
       "net.debasishg" %% "redisclient" % "3.4",
       guice,
       specs2 % Test

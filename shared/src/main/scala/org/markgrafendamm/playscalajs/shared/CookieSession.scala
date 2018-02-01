@@ -2,8 +2,16 @@ package org.markgrafendamm.playscalajs.shared
 
 object CookieSession {
 
-  case class Trace(timestamp: Int, referer: String, url: String) extends Ordered[Trace] {
-    def compare(that: Trace) = this.timestamp - that.timestamp
+  sealed trait Trace extends Ordered[Trace] {
+    def url: String
+    def referer: String
+    def timestamp: Int
+    def comparableTimestamp: Int // this is probably not the best idea
+    def compare(that: Trace): Int = this.comparableTimestamp - that.comparableTimestamp
+  }
+
+  case class SimpleTrace(timestamp: Int, referer: String, url: String) extends Trace {
+    val comparableTimestamp = timestamp
   }
 
   case class Coordinate(x: Float, y: Float)
@@ -15,8 +23,5 @@ object CookieSession {
                           minTime: Int,
                           treeWidth: Float,
                           cookie: String)
-
-
-  type Session = List[Trace]
 
 }
