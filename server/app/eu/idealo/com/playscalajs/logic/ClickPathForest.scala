@@ -1,8 +1,8 @@
-package org.markgrafendamm.playscalajs.logic
+package eu.idealo.com.playscalajs.logic
 
 import scala.collection.immutable.Seq
 
-import org.markgrafendamm.playscalajs.shared.CookieSession._
+import eu.idealo.com.playscalajs.shared.CookieSession._
 import Forest._
 
 object ClickPathForest {

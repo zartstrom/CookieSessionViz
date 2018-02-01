@@ -1,8 +1,8 @@
-package org.markgrafendamm.playscalajs.components
+package eu.idealo.com.playscalajs.components
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.VdomElement
-import org.markgrafendamm.playscalajs.components.TreeChart.treeChartComp
-import org.markgrafendamm.playscalajs.shared.CookieSession.SessionGraph
+import eu.idealo.com.playscalajs.components.TreeChart.treeChartComp
+import eu.idealo.com.playscalajs.shared.CookieSession.SessionGraph
 //import japgolly.scalajs.react.vdom.all.{div, onChange, option, select, value}
 import io.circe.generic.auto._
 import io.circe.parser._

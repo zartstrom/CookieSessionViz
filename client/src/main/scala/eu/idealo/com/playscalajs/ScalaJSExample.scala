@@ -1,7 +1,7 @@
-package org.markgrafendamm.playscalajs
+package eu.idealo.com.playscalajs
 
 import org.scalajs.dom
-import org.markgrafendamm.playscalajs.components.SessionLoader
+import eu.idealo.com.playscalajs.components.SessionLoader
 
 object ScalaJSExample {
 

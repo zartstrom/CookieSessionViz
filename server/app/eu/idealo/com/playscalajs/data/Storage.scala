@@ -1,4 +1,4 @@
-package org.markgrafendamm.playscalajs.data
+package eu.idealo.com.playscalajs.data
 
 import com.redis._
 import io.circe._
@@ -6,8 +6,8 @@ import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
 
-import org.markgrafendamm.playscalajs.shared.CookieSession._
-import org.markgrafendamm.playscalajs.logic.ClickPathForest.sessionData
+import eu.idealo.com.playscalajs.shared.CookieSession._
+import eu.idealo.com.playscalajs.logic.ClickPathForest.sessionData
 
 object Storage {
 
@@ -31,19 +31,21 @@ object Storage {
     val r = new RedisClient("127.0.0.1", 6379)
     val data = r.lrange(cookieVal, 0, -1)
     data match {
-      case None => ""
+      case None => println("no data"); ""
       case Some(list) => {
-        // dirty
         println(list)
         // val x = list.flatten.mkString(",")
         // val x2: Seq[Either[Error, Trace]] = list.flatten.map(decode[Trace](_))
         // val x3 = x2.flatten
         val x4: List[SimpleTrace] = list.flatten.map(decode[SimpleTrace](_)).collect({ case Right(t) => t }).toList
-        println(x4)
+        // println(x4)
         // buildTree(sampleTraces4)
-        val sd = sessionData(x4, cookieVal).asJson.noSpaces
-        println(sd)
-        sd
+        if (x4.length > 0) {
+          sessionData(x4, cookieVal).asJson.noSpaces
+        } else {
+          ""
+        }
+        // println(sd)
       }
     }
   }

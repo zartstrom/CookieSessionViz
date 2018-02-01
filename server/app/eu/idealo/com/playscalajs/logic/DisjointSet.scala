@@ -1,4 +1,4 @@
-package org.markgrafendamm.playscalajs.logic
+package eu.idealo.com.playscalajs.logic
 
 import scala.collection.mutable
 import scala.language.implicitConversions

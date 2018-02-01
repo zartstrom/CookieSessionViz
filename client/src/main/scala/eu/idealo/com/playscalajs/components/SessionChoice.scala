@@ -1,8 +1,8 @@
-package org.markgrafendamm.playscalajs.components
+package eu.idealo.com.playscalajs.components
 
-import org.markgrafendamm.playscalajs.shared.CookieSession._
+import eu.idealo.com.playscalajs.shared.CookieSession._
 import TreeChart.treeChartComp
-// import org.markgrafendamm.playscalajs.shared.ClickPathForest
+// import eu.idealo.com.playscalajs.shared.ClickPathForest
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.VdomElement
 import japgolly.scalajs.react.vdom.all.{div, key, onChange, option, select, value}

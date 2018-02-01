@@ -1,6 +1,6 @@
-package org.markgrafendamm.playscalajs.components
+package eu.idealo.com.playscalajs.components
 
-import org.markgrafendamm.playscalajs.shared.CookieSession._
+import eu.idealo.com.playscalajs.shared.CookieSession._
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.all.{`class`, div, id, key, onClick, onMouseMove, table, tbody, td, tr}
 import japgolly.scalajs.react.vdom.svg_<^._

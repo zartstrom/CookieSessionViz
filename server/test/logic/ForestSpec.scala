@@ -1,6 +1,6 @@
 package logic
 
-import org.markgrafendamm.playscalajs.logic.Forest._
+import eu.idealo.com.playscalajs.logic.Forest._
 import org.scalatest._
 
 

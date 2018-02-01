@@ -1,4 +1,4 @@
-package org.markgrafendamm.playscalajs.shared
+package eu.idealo.com.playscalajs.shared
 
 object CookieSession {
 
