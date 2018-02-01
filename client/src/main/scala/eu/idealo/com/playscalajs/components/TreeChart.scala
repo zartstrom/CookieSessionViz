@@ -29,7 +29,10 @@ object TreeChart {
       xnew
     }
 
-    def movieY(coordinateY: Float): Int = (200 + 60 * coordinateY).toInt
+    def movieY(coordinateY: Float, treeWidth: Float): Int = {
+      val heightFactor = math.min(60, (svgHeight - svgPadding) / treeWidth)  // 60 is good spacing but maybe we need to be tighter
+      (svgHeight / 2 + heightFactor * coordinateY).toInt
+    }
 
     def translateStr(p: Point): String = {
       s"translate(${p.x},${p.y})"
@@ -134,12 +137,9 @@ object TreeChart {
                          target := "_blank"))
        */
 
-      val maxTime = sessionGraph.maxTime
-      val minTime = sessionGraph.minTime
-
       def scale(unscaled: Coordinate): Point = {
-        val x = movieX(unscaled.x, maxTime, minTime)
-        val y = movieY(unscaled.y)
+        val x = movieX(unscaled.x, sessionGraph.maxTime, sessionGraph.minTime)
+        val y = movieY(unscaled.y, sessionGraph.treeWidth)
         Point(x, y)
       }
 

@@ -1,17 +1,19 @@
 package eu.idealo.com.playscalajs.shared
 
+import com.github.nscala_time.time.Imports._
+
 object CookieSession {
 
   sealed trait Trace extends Ordered[Trace] {
     def url: String
     def referer: String
     def timestamp: Int
-    def comparableTimestamp: Int // this is probably not the best idea
-    def compare(that: Trace): Int = this.comparableTimestamp - that.comparableTimestamp
+    def displayTimestamp: String
+    def compare(that: Trace): Int = this.timestamp - that.timestamp
   }
 
   case class SimpleTrace(timestamp: Int, referer: String, url: String) extends Trace {
-    val comparableTimestamp = timestamp
+    val displayTimestamp: String = timestamp.toString
   }
 
   case class Coordinate(x: Float, y: Float)
@@ -35,12 +37,13 @@ object CookieSession {
   case class Content(general: General, tracker: Tracker, webApp: WebApp)
 
   case class IdealoTrace(requestTime: Long, startTime: Long, endTime: Long, content: Content) extends Trace {
-    def url: String = content.webApp.isgData.url
+    lazy val url: String = content.webApp.isgData.url
 
-    override def timestamp: Int = (requestTime / 1000000).toInt
+    lazy val timestamp: Int = (requestTime / 1000000).toInt // epoch seconds
 
-    override def comparableTimestamp: Int = timestamp
+    val format = "yyyy-MM-dd HH:mm:ss"
+    lazy val displayTimestamp: String = (requestTime / 1000).toDateTime.toString(format)
 
-    override def referer: String = content.webApp.isgData.referer
+    lazy val referer: String = content.webApp.isgData.referer
   }
 }

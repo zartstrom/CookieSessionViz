@@ -76,6 +76,7 @@ lazy val commonSettings = Seq(
   organization := "markgrafendamm.de",
   libraryDependencies ++= Seq(
     "org.scala-graph" %% "graph-core" % "1.12.2",
+    "com.github.nscala-time" %% "nscala-time" % "2.18.0",
     "org.scalactic" %% "scalactic" % "3.0.4",
     "org.scalatest" %% "scalatest" % "3.0.4" % "test"
   )
