@@ -12,8 +12,8 @@ class Application @Inject()(cc: ControllerComponents) extends AbstractController
     Ok(views.html.index("it did work for sure"))
   }
 
-  def sessions = Action {
-    Ok(sessionsSerial)
+  def sessions(cookieValue: String) = Action {
+    Ok(sessionsSerial(cookieValue))
   }
 
 }

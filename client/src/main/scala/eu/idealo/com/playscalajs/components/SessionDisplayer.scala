@@ -15,13 +15,13 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.scalajs.js.timers._
 
-case class SessionLoaderState(refresh: Boolean, data: Option[SessionGraph])
+case class SessionDisplayerState(refresh: Boolean, data: Option[SessionGraph])
 
-object SessionLoader {
+object SessionDisplayer {
   val jsonHeaders =
     Map("Accept" -> "application/json", "Content-Type" -> "application/json")
 
-  class SessionLoaderBackend($ : BackendScope[String, SessionLoaderState]) {
+  class SessionLoaderBackend($ : BackendScope[String, SessionDisplayerState]) {
     def sessionsCall: Future[String] =
       dom.ext.Ajax
         .get(url = "/sessions", headers = jsonHeaders)
@@ -30,13 +30,17 @@ object SessionLoader {
     def onSelectRefresh(e: ReactEventFromInput) = {
       val checked = e.target.checked // need to persist value before using it in callback
       $.modState({ s =>
-        SessionLoaderState(checked, s.data)
+        SessionDisplayerState(checked, s.data)
       })
     }
 
-    def fetch3: Unit = {
-      Ajax
-        .get(url = "/sessions", headers = jsonHeaders)
+    def fetchData: Unit = {
+      // clean this up; i.e make ajax(cookie) return a Callback and do $.props.flatMap(ajax).runNow()
+      // need also to figure out how to replace deprecate onSuccess and still return a callback.
+      println("fetch data from backend")
+      def ajax(cookie: String) : Unit =
+        Ajax
+        .get(url = s"/sessions/${cookie}", headers = jsonHeaders)
         .map(_.responseText)
         .onSuccess {
           case r => {
@@ -51,19 +55,20 @@ object SessionLoader {
 
                 // $.setState(Some(sessionGraph)).runNow()
                 $.modState({ s =>
-                  SessionLoaderState(s.refresh, Some(sessionGraph))
+                  SessionDisplayerState(s.refresh, Some(sessionGraph))
                 }).runNow()
               }
             }
           }
         }
+      $.props.map( cookie => { println(s"cookie: ${cookie}"); ajax(cookie) }).runNow()
     }
 
     def refresh(refreshNow: Boolean): Unit = {
       val refreshToggle = $.state.runNow().refresh
 
       if (refreshToggle || refreshNow) {
-        fetch3
+        fetchData
       }
 
       setTimeout(10 seconds) { // note the absence of () =>
@@ -71,7 +76,7 @@ object SessionLoader {
       }
     }
 
-    def render(name: String, state: SessionLoaderState): VdomElement = {
+    def render(name: String, state: SessionDisplayerState): VdomElement = {
       println("render session loader")
       val refreshDiv = <.div(
         <.form(^.onChange ==> onSelectRefresh _,
@@ -89,9 +94,9 @@ object SessionLoader {
 
   val emptySessionGraph: Option[SessionGraph] = None
 
-  val sessionLoaderComp = ScalaComponent
-    .builder[String]("Load sessions")
-    .initialState(SessionLoaderState(false, emptySessionGraph))
+  val sessionDisplayerComponent = ScalaComponent
+    .builder[String]("display session")
+    .initialState(SessionDisplayerState(false, emptySessionGraph))
     .renderBackend[SessionLoaderBackend]
     .componentDidMount(life =>
       Callback { life.backend.refresh(refreshNow = true) })

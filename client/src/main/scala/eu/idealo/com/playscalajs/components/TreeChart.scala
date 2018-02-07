@@ -1,10 +1,12 @@
 package eu.idealo.com.playscalajs.components
 
 import eu.idealo.com.playscalajs.shared.CookieSession._
+import eu.idealo.com.playscalajs.functions.InfoTable._
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.all.{`class`, div, id, key, onClick, onMouseMove, table, tbody, td, tr}
 import japgolly.scalajs.react.vdom.svg_<^._
 import org.querki.jquery.{JQueryPosition, $ => jquery}
+import org.scalajs.dom.html.Table
 
 
 case class Point(x: Int, y: Int)
@@ -17,19 +19,19 @@ object TCState {
 object TreeChart {
 
   class BackendTreeChart($ : BackendScope[SessionGraph, TCState]) {
-    val svgHeight = 400
+    val svgHeight = 500
     val svgId = "clickPathChart"
-    val svgDisplayWidth = 500
+    val svgDisplayWidth = 900
     val svgPadding = 40
 
-    def movieX(time: Float, timeMax: Int, timeMin: Int): Int = {
+    def movieX(time: Double, timeMax: Long, timeMin: Long): Int = {
       val padding = svgPadding
       val width = svgDisplayWidth
       val xnew = padding + ((width - 2 * padding) * (time - timeMin) / (timeMax - timeMin).toFloat).toInt
       xnew
     }
 
-    def movieY(coordinateY: Float, treeWidth: Float): Int = {
+    def movieY(coordinateY: Double, treeWidth: Float): Int = {
       val heightFactor = math.min(60, (svgHeight - svgPadding) / treeWidth)  // 60 is good spacing but maybe we need to be tighter
       (svgHeight / 2 + heightFactor * coordinateY).toInt
     }
@@ -58,21 +60,6 @@ object TreeChart {
       div(sessionInfo, traceInfo, svg, timeInfo)
     }
 
-    // move this stuff
-    def toLeft(s: String) = div(`class` := "toLeft", s)
-    def toRight(s: String) = div(`class` := "toRight", s)
-    def cell(key: String, content: Any) =
-      td(toLeft(key), toRight(content.toString))
-
-    def makeInfoTableRow(data: Seq[(String, Any)]) = {
-      tr(data.map(t => cell(t._1, t._2)).toVdomArray)
-    }
-
-    def makeInfoTable(data: Seq[(String, Any)], nofColumns: Int) = {
-      val trs = data.grouped(nofColumns).map(makeInfoTableRow(_)).toVdomArray
-      table(tbody(trs))
-    }
-
     def renderSessionInfo(sessionGraph: SessionGraph) = {
       val names = List("cookie value:",
                        "nof clickpaths:",
@@ -84,20 +71,20 @@ object TreeChart {
                         1,
                         sessionGraph.nodes.length,
                         0,
-                        sessionGraph.minTime,
-                        sessionGraph.maxTime)
-      val sessionInfoTable = makeInfoTable(names zip values, 2)
+                        renderEpochMillis(sessionGraph.minTime),
+                        renderEpochMillis(sessionGraph.maxTime)).map(x => Text(x.toString))
+      val sessionInfoTable: VdomTagOf[Table] = makeInfoTable(names zip values, 2)
       div(`class` := "info", sessionInfoTable)
     }
 
     def renderTraceInfo(traceOption: Option[Trace]) = {
       val names = List("timestamp:", "referer:", "url:")
       val traceTable = traceOption match {
-        case None => makeInfoTable(names zip List("", "", ""), 3)
+        case None => makeInfoTable(names zip List.fill(3)(Content.empty), 1)
         case Some(trace) =>
           makeInfoTable(
-            names zip List(trace.timestamp, trace.referer, trace.url),
-            3)
+            names zip List(Text(trace.displayTimestamp), Link(trace.referer), Link(trace.url)),
+            1)
       }
       div(id := "traceInfo", `class` := "info", traceTable)
 
@@ -105,12 +92,12 @@ object TreeChart {
 
     def renderTimeInfo(sg: SessionGraph, lineXOpt: Option[Int]) = {
       val values = lineXOpt match {
-        case None => List("", "")
+        case None => List.fill(2)(Content.empty)
         case Some(x) =>
-          // need to generalize this, i.e. for actual timestamps
           val time = (sg.maxTime - sg.minTime) * (x - svgPadding) / (svgDisplayWidth - 2 * svgPadding) + sg.minTime
           val s = sg.nodes.filter(_.data.timestamp <= time).length
-          List(time, s)
+          val timeString = renderEpochMillis(time)
+          List(Text(timeString), Text(s.toString))
       }
       val data = List("tm", "nof smaller") zip values
       div(id := "timeInfo", `class` := "info", makeInfoTable(data, 2))

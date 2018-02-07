@@ -28,19 +28,19 @@ body {
 }
 
 td {
-    width: 200px;
+    min-width: 300px;
     padding-left: 12px;
     padding-right: 12px;
 }
 
 .toLeft {
     float: left;
-    width: 50%;
+    width: 110px;
     text-align: left;
 }
 
 .toRight {
-    float: right;
-    width: 50%;
-    text-align: right;
+    float: left;
+    /*width: 50%;*/
+    text-align: left;
 }

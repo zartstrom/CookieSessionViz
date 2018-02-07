@@ -9,4 +9,4 @@ GET        /                             eu.idealo.com.playscalajs.controllers.A
 GET        /assets/*file                 controllers.Assets.at(file)
 GET        /versionedAssets/*file        controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /sessions                     eu.idealo.com.playscalajs.controllers.Application.sessions
+GET        /sessions/:cookieValue        eu.idealo.com.playscalajs.controllers.Application.sessions(cookieValue: String)

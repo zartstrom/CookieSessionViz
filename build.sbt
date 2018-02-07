@@ -36,6 +36,7 @@ lazy val client = (project in file("client"))
       "org.scala-js" %%% "scalajs-dom" % "0.9.3",
       "be.doeraene" %%% "scalajs-jquery" % "0.9.2",
       "org.querki" %%% "jquery-facade" % "1.2",
+      "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-M12",
       "io.circe" %%% "circe-core" % circeVersion,
       "io.circe" %%% "circe-parser" % circeVersion,
       "io.circe" %%% "circe-generic" % circeVersion,
@@ -75,8 +76,8 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.2",
   organization := "markgrafendamm.de",
   libraryDependencies ++= Seq(
+    "io.github.cquiroz" %% "scala-java-time" % "2.0.0-M12",
     "org.scala-graph" %% "graph-core" % "1.12.2",
-    "com.github.nscala-time" %% "nscala-time" % "2.18.0",
     "org.scalactic" %% "scalactic" % "3.0.4",
     "org.scalatest" %% "scalatest" % "3.0.4" % "test"
   )
