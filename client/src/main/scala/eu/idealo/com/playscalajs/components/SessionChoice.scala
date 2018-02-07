@@ -6,44 +6,51 @@ import TreeChart.treeChartComp
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.VdomElement
 import japgolly.scalajs.react.vdom.all.{div, key, onChange, option, select, value}
-import japgolly.scalajs.react.vdom.svg_<^._
+import japgolly.scalajs.react.vdom.html_<^._
+
 
 object SessionChoice {
   val NoArgs =
     ScalaComponent.static("No args")(div("Hello!"))
 
-  class ChoiceBackend($ : BackendScope[Seq[List[Trace]], Int]) {
+  class ChoiceBackend($ : BackendScope[String, Option[String]]) {
     def onC(e: ReactEventFromInput) = {
-      val x = e.target.value.toInt
+      val x = e.target.value.toString
       println(s"event fun ${x}")
-      $.setState(x)
+      $.setState(Some(x))
     }
 
-    def render(sessions: Seq[List[Trace]], choiceState: Int): VdomElement = {
+    def onAction(e: ReactEventFromInput) = {
+      val x = e.target.value.toString
+      println(s"event fun ${x}")
+      e.preventDefaultCB >>
+      $.setState(Some(x))
+    }
+
+    def renderForm(): VdomElement = {
+      // value := "01ye0h0300j720a0zr",
+      <.form(^.onSubmit ==> onAction,  <.input(^.`type` := "text", ^.onChange ==> onAction), <.input(^.`type` := "submit", value := "Submit"))
+    }
+    val formDiv = <.div(renderForm)
+
+    def render(dummy: String, cookie: Option[String]): VdomElement = {
       //just use length of sessions
       println("render session choice")
-      println(sessions.length)
-      if (sessions.length > 0) {
-        val options = sessions.toList.zipWithIndex
-          .map({
-            case (_, index) => option(key := index, value := index.toString, s"Session${index}")
-          })
-          .toVdomArray
-        // .map({(trace, idx) => option(value := idx.toString)})
-        val sel = select(options, onChange ==> onC _)
-
-        // def treeChart(x: Int) = treeChartComp(sg) // put something in there instead of nil.
-        // div(div(sel), div(treeChart(choiceState)))
-        div()
-      } else {
-        div("no data yet")
+      println(cookie)
+      val contentDiv = cookie match {
+        case None => div("No data yet")
+        case Some(cookieString) => <.div(SessionLoader.sessionLoaderComp(cookieString))
       }
+
+      // <.div(contentDiv)
+      <.div(formDiv, contentDiv)
     }
   }
 
   val sessionChoiceComp = ScalaComponent
-    .builder[Seq[List[Trace]]]("Choose a session")
-    .initialState(0)
+    .builder[String]("Enter a cookie value")
+    // .initialState(Option.empty[String])
+    .initialState(Option("blub"))
     .renderBackend[ChoiceBackend]
     .build
 }

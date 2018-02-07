@@ -35,28 +35,31 @@ object SessionLoader {
     }
 
     def fetch3: Unit = {
-      Ajax
-        .get(url = "/sessions", headers = jsonHeaders)
-        .map(_.responseText)
-        .onSuccess {
-          case r => {
-            decode[SessionGraph](r) match {
-              case Left(_) => {
-                println(s"Could not parse <${r}>")
-                $.modState(s => s)
-              }
-              case Right(sessionGraph) => {
-                println("got new bread")
-                println(r)
+      def getData(cookie: String) = {
+        Ajax
+          .get(url = s"/sessions/${cookie}", headers = jsonHeaders)
+          .map(_.responseText)
+          .onSuccess {
+            case r => {
+              decode[SessionGraph](r) match {
+                case Left(_) => {
+                  println(s"Could not parse <${r}>")
+                  $.modState(s => s)
+                }
+                case Right(sessionGraph) => {
+                  println("got new bread")
+                  println(r)
 
-                // $.setState(Some(sessionGraph)).runNow()
-                $.modState({ s =>
-                  SessionLoaderState(s.refresh, Some(sessionGraph))
-                }).runNow()
+                  // $.setState(Some(sessionGraph)).runNow()
+                  $.modState({ s =>
+                    SessionLoaderState(s.refresh, Some(sessionGraph))
+                  }).runNow()
+                }
               }
             }
           }
-        }
+      }
+      $.props.map(getData).runNow()
     }
 
     def refresh(refreshNow: Boolean): Unit = {

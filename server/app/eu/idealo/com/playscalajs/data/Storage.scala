@@ -27,7 +27,8 @@ object Storage {
   )
 
   //def sessionsSerial(cookieVal: String) = {
-  def sessionsSerial() = {
+  def sessionsSerial(cookieVal: String) = {
+
     // val cookieVal = "01ts0h0900jcsx1btz"
     val cookieVal = "01ye0h0300j720a0zr"
     println(cookieVal)
