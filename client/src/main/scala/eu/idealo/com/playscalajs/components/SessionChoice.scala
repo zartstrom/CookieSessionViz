@@ -1,45 +1,58 @@
 package eu.idealo.com.playscalajs.components
 
+import scala.scalajs.js.JSON.stringify
 import eu.idealo.com.playscalajs.shared.CookieSession._
 import TreeChart.treeChartComp
 // import eu.idealo.com.playscalajs.shared.ClickPathForest
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.VdomElement
-import japgolly.scalajs.react.vdom.all.{div, key, onChange, option, select, value}
+import japgolly.scalajs.react.vdom.all.{
+  div,
+  key,
+  onChange,
+  option,
+  select,
+  value
+}
 import japgolly.scalajs.react.vdom.html_<^._
-
 
 object SessionChoice {
   val NoArgs =
     ScalaComponent.static("No args")(div("Hello!"))
 
   class ChoiceBackend($ : BackendScope[String, Option[String]]) {
-    def onC(e: ReactEventFromInput) = {
-      val x = e.target.value.toString
-      println(s"event fun ${x}")
-      $.setState(Some(x))
+
+    def onSubmit(e: ReactEventFromInput) = {
+      println("in onSubmit")
+      //println(stringify(e))
+      // println(e.target)
+      // val x = e.target.value.toString
+      // println(s"event fun ${x}")
+      e.preventDefaultCB >> $.modState(s => s)
     }
 
-    def onAction(e: ReactEventFromInput) = {
-      val x = e.target.value.toString
-      println(s"event fun ${x}")
-      e.preventDefaultCB >>
-      $.setState(Some(x))
-    }
+    def onFormChange(e: ReactEventFromInput) = Callback {}
 
-    def renderForm(): VdomElement = {
+    def onChange(e: ReactEventFromInput) = {
+      val newValue = e.target.value
+      $.modState(_ => Some(newValue))
+    }
+    def renderForm(cookie: Option[String]): VdomElement = {
       // value := "01ye0h0300j720a0zr",
-      <.form(^.onSubmit ==> onAction,  <.input(^.`type` := "text", ^.onChange ==> onAction), <.input(^.`type` := "submit", value := "Submit"))
+      <.form(^.onSubmit ==> onSubmit,
+        <.input(^.`type` := "text", ^.onChange ==> onChange, ^.value := cookie.get),
+        <.input(^.`type` := "submit", value := "Submit"))
     }
-    val formDiv = <.div(renderForm)
 
     def render(dummy: String, cookie: Option[String]): VdomElement = {
       //just use length of sessions
       println("render session choice")
       println(cookie)
-      val contentDiv = cookie match {
+      val formDiv = <.div(renderForm(cookie))
+      def contentDiv = cookie match {
         case None => div("No data yet")
-        case Some(cookieString) => <.div(SessionLoader.sessionLoaderComp(cookieString))
+        case Some(cookieString) =>
+          <.div(SessionDisplayer.sessionDisplayerComponent(cookieString))
       }
 
       // <.div(contentDiv)

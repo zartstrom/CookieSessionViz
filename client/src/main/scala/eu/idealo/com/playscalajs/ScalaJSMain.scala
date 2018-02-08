@@ -1,10 +1,10 @@
 package eu.idealo.com.playscalajs
 
 import org.scalajs.dom
-import eu.idealo.com.playscalajs.components.SessionLoader
+// import eu.idealo.com.playscalajs.components.SessionDisplayer
 import eu.idealo.com.playscalajs.components.SessionChoice
 
-object ScalaJSExample {
+object ScalaJSMain {
 
   def main(args: Array[String]): Unit = {
     // dom.document.getElementById("scalajsShoutOut").textContent = SharedMessages.itWorks
