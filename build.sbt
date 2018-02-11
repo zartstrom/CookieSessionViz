@@ -40,7 +40,9 @@ lazy val client = (project in file("client"))
       "io.circe" %%% "circe-core" % circeVersion,
       "io.circe" %%% "circe-parser" % circeVersion,
       "io.circe" %%% "circe-generic" % circeVersion,
-      "com.github.japgolly.scalajs-react" %%% "core" % "1.1.1"
+      "com.github.japgolly.scalajs-react" %%% "core" % "1.1.1",
+      "com.github.japgolly.scalacss" %%% "core" % "0.5.3",
+      "com.github.japgolly.scalacss" %%% "ext-react" % "0.5.3"
       // "eu.unicredit" %%% "paths-scala-js" % "0.4.5"
     ),
     jsDependencies ++= Seq(

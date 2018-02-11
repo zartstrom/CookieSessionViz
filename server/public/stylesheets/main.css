@@ -13,18 +13,17 @@
     padding: 0px;
 }
 
-.info {
-    background-color: #EAECEE;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
 body {
     background-color: #ABB2B9;
 }
 
 * {
     font-family: medium-content-serif-font,Georgia,Cambria,"Times New Roman",Times,serif;
+}
+
+label, input {
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 td {

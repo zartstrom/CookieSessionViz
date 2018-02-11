@@ -1,13 +1,25 @@
 package eu.idealo.com.playscalajs.components
 
 import eu.idealo.com.playscalajs.shared.CookieSession._
+import eu.idealo.com.playscalajs.stylesheets.Style
 import eu.idealo.com.playscalajs.functions.InfoTable._
 import japgolly.scalajs.react._
-import japgolly.scalajs.react.vdom.all.{`class`, div, id, key, onClick, onMouseMove, table, tbody, td, tr}
+import japgolly.scalajs.react.vdom.all.{
+  `class`,
+  div,
+  id,
+  key,
+  onClick,
+  onMouseMove,
+  table,
+  tbody,
+  td,
+  tr
+}
 import japgolly.scalajs.react.vdom.svg_<^._
 import org.querki.jquery.{JQueryPosition, $ => jquery}
 import org.scalajs.dom.html.Table
-
+import scalacss.ScalaCssReact._
 
 case class Point(x: Int, y: Int)
 case class Line(start: Point, end: Point)
@@ -32,7 +44,7 @@ object TreeChart {
     }
 
     def movieY(coordinateY: Double, treeWidth: Float): Int = {
-      val heightFactor = math.min(60, (svgHeight - svgPadding) / treeWidth)  // 60 is good spacing but maybe we need to be tighter
+      val heightFactor = math.min(60, (svgHeight - svgPadding) / treeWidth) // 60 is good spacing but maybe we need to be tighter
       (svgHeight / 2 + heightFactor * coordinateY).toInt
     }
 
@@ -67,14 +79,16 @@ object TreeChart {
                        "nof leadouts:",
                        "session start:",
                        "session end:")
-      val values = List(sessionGraph.cookie,
-                        1,
-                        sessionGraph.nodes.length,
-                        0,
-                        renderEpochMillis(sessionGraph.minTime),
-                        renderEpochMillis(sessionGraph.maxTime)).map(x => Text(x.toString))
-      val sessionInfoTable: VdomTagOf[Table] = makeInfoTable(names zip values, 2)
-      div(`class` := "info", sessionInfoTable)
+      val values =
+        List(sessionGraph.cookie,
+             1,
+             sessionGraph.nodes.length,
+             0,
+             renderEpochMillis(sessionGraph.minTime),
+             renderEpochMillis(sessionGraph.maxTime)).map(x => Text(x.toString))
+      val sessionInfoTable: VdomTagOf[Table] =
+        makeInfoTable(names zip values, 2)
+      div(Style.infoBox, sessionInfoTable)
     }
 
     def renderTraceInfo(traceOption: Option[Trace]) = {
@@ -82,11 +96,12 @@ object TreeChart {
       val traceTable = traceOption match {
         case None => makeInfoTable(names zip List.fill(3)(Content.empty), 1)
         case Some(trace) =>
-          makeInfoTable(
-            names zip List(Text(trace.displayTimestamp), Link(trace.referer), Link(trace.url)),
-            1)
+          makeInfoTable(names zip List(Text(trace.displayTimestamp),
+                                       Link(trace.referer),
+                                       Link(trace.url)),
+                        1)
       }
-      div(id := "traceInfo", `class` := "info", traceTable)
+      div(id := "traceInfo", Style.infoBox, traceTable)
 
     }
 
@@ -100,7 +115,7 @@ object TreeChart {
           List(Text(timeString), Text(s.toString))
       }
       val data = List("tm", "nof smaller") zip values
-      div(id := "timeInfo", `class` := "info", makeInfoTable(data, 2))
+      div(id := "timeInfo", Style.infoBox, makeInfoTable(data, 2))
     }
 
     def renderLine(lineXOpt: Option[Int]) = {
@@ -161,17 +176,19 @@ object TreeChart {
 
       val verticalLine = renderLine(state.lineXOpt)
 
-      <.svg(
-        id := svgId,
-        `class` := "info",
-        ^.width := "100%",
-        ^.height := svgHeight,
-        onMouseMove ==> drawLine,
-        <.g(key := "chart",
-            ^.transform := "translate(0,0)",
-            verticalLine,
-            edges,
-            nodes)
+      div(
+        Style.infoBox,
+        <.svg(
+          id := svgId,
+          ^.width := "100%",
+          ^.height := svgHeight,
+          onMouseMove ==> drawLine,
+          <.g(key := "chart",
+              ^.transform := "translate(0,0)",
+              verticalLine,
+              edges,
+              nodes)
+        )
       )
 
     }

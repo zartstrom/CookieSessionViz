@@ -1,19 +1,24 @@
 package eu.idealo.com.playscalajs.components
+
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.VdomElement
-import eu.idealo.com.playscalajs.components.TreeChart.treeChartComp
-import eu.idealo.com.playscalajs.shared.CookieSession.SessionGraph
-//import japgolly.scalajs.react.vdom.all.{div, onChange, option, select, value}
-import io.circe.generic.auto._
-import io.circe.parser._
 import japgolly.scalajs.react.vdom.html_<^._
+import scalacss.ScalaCssReact._
 import org.scalajs.dom
 import org.scalajs.dom.ext.Ajax
+import scala.scalajs.js.timers._
+
+import eu.idealo.com.playscalajs.components.TreeChart.treeChartComp
+import eu.idealo.com.playscalajs.stylesheets.Style
+import eu.idealo.com.playscalajs.shared.CookieSession.SessionGraph
+
+import io.circe.generic.auto._
+import io.circe.parser._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import scala.scalajs.js.timers._
+import scala.util.{Try, Success, Failure}
 
 case class SessionDisplayerState(refresh: Boolean, data: Option[SessionGraph])
 
@@ -34,44 +39,39 @@ object SessionDisplayer {
       })
     }
 
-    def ajax(cookie: String): Unit = {
-      println("in ajax")
+    def decodeSessionGraph(string: String): Callback = {
+      decode[SessionGraph](string) match {
+        case Left(_) => Callback.empty
+        case Right(sessionGraph) => {
+          $.modState({ s =>
+            SessionDisplayerState(s.refresh, Some(sessionGraph))
+          })
+        }
+      }
+    }
+
+    def fetchDataAjax(cookie: String): Unit = {
+      println(s"in ajax to request session data for cookie ${cookie}")
       Ajax
         .get(url = s"/sessions/${cookie}", headers = jsonHeaders)
         .map(_.responseText)
-        .onSuccess {
-          case r => {
-            decode[SessionGraph](r) match {
-              case Left(_) => {
-                println(s"Could not parse <${r}>")
-                $.modState(s => s)
-              }
-              case Right(sessionGraph) => {
-                println("got new bread")
-                println(r)
-
-                // $.setState(Some(sessionGraph)).runNow()
-                $.modState({ s =>
-                  SessionDisplayerState(s.refresh, Some(sessionGraph))
-                }).runNow()
-              }
-            }
+        .onComplete {
+          case Success(string) => {
+            decodeSessionGraph(string).runNow()
           }
+          case Failure(_) => println("Failure")
         }
     }
 
     def fetchData: Unit = {
-      // clean this up; i.e make ajax(cookie) return a Callback and do $.props.flatMap(ajax).runNow()
-      // need also to figure out how to replace deprecate onSuccess and still return a callback.
+      /* query backend props and fetch data with ajax call */
       println("fetch data from backend")
       $.props
-        .map(cookie => { println(s"cookie: ${cookie}"); ajax(cookie) })
+        .map(cookie => fetchDataAjax(cookie))
         .runNow()
     }
 
     def refresh(refreshNow: Boolean): Unit = {
-      println("refresh")
-      println($.props.runNow())
       val refreshToggle = $.state.runNow().refresh
 
       if (refreshToggle || refreshNow) {
@@ -94,7 +94,9 @@ object SessionDisplayer {
                        ^.`type` := "checkbox"),
                <.label(^.`for` := "refresh", "auto refresh")))
       val dataDiv = state.data match {
-        case None     => { <.div("no data available") }
+        case None => {
+          <.div(Style.infoBox, "No data available, enter a cookie value")
+        }
         case Some(sg) => <.div(treeChartComp(sg))
       }
       <.div(dataDiv, refreshDiv)
@@ -107,13 +109,11 @@ object SessionDisplayer {
     .builder[String]("display session")
     .initialState(SessionDisplayerState(false, emptySessionGraph))
     .renderBackend[SessionLoaderBackend]
-    // .componentDidUpdate(life => Callback { life.backend.fetchData })
-    // .componentWillReceiveProps(life => Callback { life.backend.fetchData })
-    //.componentWillReceivePropsConst(life => Callback { life.backend.fetchData })
-    //.shouldComponentUpdate(
     .componentWillReceiveProps(life =>
       Callback {
-        if (life.currentProps != life.nextProps) { life.backend.ajax(life.nextProps) }
+        if (life.currentProps != life.nextProps) {
+          life.backend.fetchDataAjax(life.nextProps)
+        }
     })
     .componentDidMount(life =>
       Callback { life.backend.refresh(refreshNow = false) })
